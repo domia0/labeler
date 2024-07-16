@@ -1,0 +1,103 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>de.hsrm.labeler</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Labeler</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="dominik.arnolds@student.hs-rm.de" url="https://www.yourcompany.com">hsrm</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    A Labeler for symptom-candidates in solutions.<br>
+    <em>This is my description.</em>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Labeler" secondary="true" icon="AllIcons.Toolwindows.WebToolWindow" anchor="right"
+                    factoryClass="de.hsrm.labeler.gui.toolWin.LabelerToolWindowFactory"/>
+
+        <!-- LabelerState -->
+        <applicationService serviceImplementation="de.hsrm.labeler.common.LabelerState"/>
+
+        <!-- ListenerRegistration -->
+        <applicationService serviceImplementation="de.hsrm.labeler.common.ListenerRegistration"/>
+
+        <!-- SessionService -->
+        <applicationService serviceImplementation="de.hsrm.labeler.api.service.SessionService"/>
+
+        <!-- LabelerService -->
+        <applicationService serviceImplementation="de.hsrm.labeler.api.service.LabelerService"/>
+
+        <!-- AppUpdateService -->
+        <applicationService serviceImplementation="de.hsrm.labeler.api.service.AppUpdateService"/>
+
+        <!-- HttpService -->
+        <applicationService serviceImplementation="de.hsrm.labeler.api.http.HttpService"/>
+
+    </extensions>
+
+    <!-- Global Toolbar -->
+    <actions>
+        <!-- Select User -->
+        <group id="UserSelectionActionGroup"
+               class="de.hsrm.labeler.gui.mainToolbar.user.UserSelectionActionGroup"
+               icon="/icons/user-5-svgrepo-com.svg"
+               text="User"
+               popup="true">
+
+            <add-to-group group-id="MainToolbarCenter" anchor="first" />
+
+            <action id="UserBjoernAction"
+                    class="de.hsrm.labeler.gui.mainToolbar.user.UserBjoernAction"
+                    text="Björn" description="Switch to Björn">
+            </action>
+
+            <action id="UserSvenEricAction"
+                    class="de.hsrm.labeler.gui.mainToolbar.user.UserSvenEricAction" text="Sven Eric"
+                    description="Switch to Sven Eric">
+            </action>
+        </group>
+
+        <!-- Select Session -->
+        <group
+                id="SessionSelectionActionGroup"
+                class="de.hsrm.labeler.gui.mainToolbar.session.SessionSelectionActionGroup"
+                popup="true"
+                text="Dynamically Session Actions"
+                description="Select sessions"
+                icon="/icons/jam-2-svgrepo-com.svg">
+
+            <add-to-group group-id="MainToolbarCenter" anchor="after"
+                          relative-to-action="UserSelectionActionGroup"/>
+        </group>
+
+        <!-- Previous Labeler, Labeler, Next Labeler -->
+        <action id="PrevSolution"
+                class="de.hsrm.labeler.gui.mainToolbar.navigation.SolutionPrevAction"
+                icon="AllIcons.Actions.Back"
+                text="Previous" description="Previous solution">
+                <add-to-group group-id="MainToolbarCenter" anchor="after"
+                              relative-to-action="SessionSelectionActionGroup"/>
+        </action>
+
+        <action id="NextSolution"
+                class="de.hsrm.labeler.gui.mainToolbar.navigation.SolutionNextAction"
+                icon="AllIcons.Actions.Forward"
+                text="Next" description="Next solution">
+                <add-to-group group-id="MainToolbarCenter" anchor="after"
+                              relative-to-action="PrevSolution"/>
+        </action>
+    </actions>
+</idea-plugin>
